@@ -1,6 +1,6 @@
 ---
 title: "Darwin Core mapping"
-subtitle: "For: my_dataset_title"
+subtitle: "For: Checklist of non-native freshwater fauna in Portugal"
 author:
 - author_1
 - author_2
@@ -26,7 +26,7 @@ Install required libraries (only if the libraries have not been installed before
 
 ```{r}
 installed <- rownames(installed.packages())
-required <- c("tidyverse", "tidylog", "here", "janitor", "readxl", "digest", "rgbif", "stringr")
+required <- c("tidyverse", "here", "janitor", "readxl", "digest", "rgbif")
 if (!all(required %in% installed)) {
   install.packages(required[!required %in% installed])
 }
@@ -36,27 +36,23 @@ Load libraries:
 
 ```{r message = FALSE}
 library(tidyverse)      # To do data science
-library(tidylog)        # To provide feedback on dplyr functions
 library(here)           # To find files
 library(janitor)        # To clean input data
 library(readxl)         # To read Excel files
 library(digest)         # To generate hashes
 library(rgbif)          # To use GBIF services
-library(stringr)        # To work with strings
 ```
 
 # Read source data
 
-Create a data frame `input_data` from the source data:
+Create a data frame `raw`_data` from the source data:
 
-```{r}
-input_data <- read_excel(path = here("data", "raw", "checklist.xlsx"), sheet = "checklist") 
-```
+The data is maintained in [this Google Spreadsheet](https://docs.google.com/spreadsheets/d/1TBv5iPiPnSUSu36J0K6HxHu3pYs2A1rL/edit?gid=1283124273#gid=1283124273).
 
-Preview data:
+Read the relevant worksheet (published as csv):
 
-```{r}
-input_data |> head()
+```{r read_source_data}
+raw_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSiTV0Y_GfXhKBxGdNueR5GKLN_mLC76CE7mrYVUbLjb2ykRvB2TVMosxqPWKnVWg/pub?gid=1283124273&single=true&output=csv", col_types = cols(.default = "c"))
 ```
 
 # Process source data
@@ -93,24 +89,6 @@ parsed_names |>
 ```
 
 Correct names in the raw file and reparse.
-Here, we do the correction with code for demonstration purposes only:
-
-```{r correct and reparse}
-input_data <-
-  input_data |>
-  mutate(scientific_name = recode(scientific_name, "AseroÙ rubra" = "Asero rubra"))
-
-# Redo parsing
-parsed_names <- input_data |>
-  distinct(scientific_name) |>
-  pull() |>
-  parsenames()
-
-# Show names with nomenclatural issues again
-parsed_names |>
-  select(scientificname, type, parsed, parsedpartially, rankmarker) |>
-  filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
-```
 
 ## Taxon IDs
 
@@ -130,7 +108,9 @@ taxon_id_hashes <-
   ) |>
   select(taxon_id_hash, scientific_name)
 
-taxon_id_hashes |> view()
+taxon_id_hashes
+
+write.csv(taxon_id_hashes, here("data", "raw", "taxon_id_hashes.csv"), na = "")
 ```
 
 After you have filled in the `taxon_id_hash` column in the raw data file, run all code again from the beginning.
@@ -161,7 +141,7 @@ input_data <-
   input_data |>
   mutate(
     taxon_id = paste(
-      "my_dataset_shortname", # e.g. "alien-fishes-checklist"
+      "alien-freshwater-fauna-portugal",
       "taxon",
       taxon_id_hash,
       sep = ":"
@@ -173,22 +153,7 @@ input_data <-
 Save the source data to the repository to keep track of changes:
 
 ```{r}
-write_csv(raw_data, here("data", "raw", "checklist_dump.csv"), na = "")
-```
-
-
-## Preview data
-
-Show the number of taxa and distributions per kingdom and rank:
-
-```{r}
-input_data |>
-  group_by(kingdom, taxon_rank) |>
-  summarize(
-    `# taxa` = n_distinct(taxon_id),
-    `# distributions` = n()
-  ) |>
-  adorn_totals("row")
+write_csv(raw_data, here("data", "raw", "alien-freshwater-fauna-portugal-checklist_dump.csv"), na = "")
 ```
 
 # Taxon core
@@ -206,24 +171,16 @@ taxon <-
   input_data |>
   distinct(taxon_id, .keep_all = TRUE) |>
   mutate(
-    language = "my_language", # e.g. "en"
-    license = "my_license", # e.g. "http://creativecommons.org/publicdomain/zero/1.0/"
-    rightsHolder = "my_rights_holder", # e.g. "INBO"
-    datasetID = "my_dataset_doi", # e.g. "https://doi.org/10.15468/xvuzfh"
-    institutionCode = "my_institution_code", # e.g. "INBO"
-    datasetName = "my_dataset_title", # e.g. "Checklist of non-native freshwater fishes in Flanders, Belgium"
+    language = "en", # e.g. "en"
+    license = "https://creativecommons.org/licenses/by/4.0/",
+    rightsHolder = "MARE", 
+    datasetID = "my_dataset_doi",
+    institutionCode = "MARE",
+    datasetName = "Checklist of non-native freshwater fauna in Portugal"
   )
 ```
 
 ### Taxon-level terms
-
-Inspect values:
-
-```{r}
-taxon |>
-  group_by(kingdom) |>
-  count()
-```
 
 The following terms contain information about the taxon:
 
@@ -260,27 +217,7 @@ taxon <-
   )
 ```
 
-Preview data:
-
-```{r}
-taxon |> head()
-```
-
 # Create distribution extension
-
-## Inspect values
-
-```{r}
-input_data |>
-  group_by(country_code, location) |>
-  count()
-```
-
-```{r}
-input_data |>
-  group_by(occurrence_status) |>
-  count()
-```
 
 ## Term mapping
 
@@ -306,7 +243,6 @@ distribution <-
     countryCode = country_code,
     occurrenceStatus = occurrence_status,
     establishmentMeans = establishment_means,
-    threatStatus = c(NA, NA, NA, NA, "EN", "VU", NA, NA, NA, NA, NA),
     degreeOfEstablishment = degree_of_establishment,
     eventDate = case_when(
       is.na(date_first_observation) & is.na(date_last_observation) ~ NA,
@@ -333,12 +269,6 @@ distribution <-
     "source", "occurrenceRemarks"
   ) |>
   arrange(taxonID)
-```
-
-Preview data:
-
-```{r}
-distribution |> head()
 ```
 
 # Species profile extension
