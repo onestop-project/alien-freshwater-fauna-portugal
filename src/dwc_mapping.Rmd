@@ -63,7 +63,7 @@ Clean data somewhat:
 
 ```{r}
 input_data <-
-  input_data |>
+  raw_data |>
   remove_empty("rows") |>
   clean_names()
 ```
