@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="author_1" />
+<meta name="author" content="author_2" />
+
+<meta name="date" content="2025-11-27" />
+
+<title>Darwin Core mapping</title>
+
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">my_dataset_shortname</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="dwc_mapping.html">Darwin Core mapping</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="my_dataset_repository">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Darwin Core mapping</h1>
+<h3 class="subtitle">For: Checklist of non-native freshwater fauna in
+Portugal</h3>
+<h4 class="author">author_1</h4>
+<h4 class="author">author_2</h4>
+<h4 class="date">2025-11-27</h4>
+
+</div>
+
+
+<!-- For examples, see https://github.com/trias-project/checklist-recipe/wiki/Examples -->
+<div id="setup" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Setup</h1>
+<p>Install required libraries (only if the libraries have not been
+installed before):</p>
+<pre class="r"><code>installed &lt;- rownames(installed.packages())
+required &lt;- c(&quot;tidyverse&quot;, &quot;here&quot;, &quot;janitor&quot;, &quot;readxl&quot;, &quot;digest&quot;, &quot;rgbif&quot;)
+if (!all(required %in% installed)) {
+  install.packages(required[!required %in% installed])
+}</code></pre>
+<p>Load libraries:</p>
+<pre class="r"><code>library(tidyverse)      # To do data science
+library(here)           # To find files
+library(janitor)        # To clean input data
+library(readxl)         # To read Excel files
+library(digest)         # To generate hashes
+library(rgbif)          # To use GBIF services</code></pre>
+</div>
+<div id="read-source-data" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Read source data</h1>
+<p>Create a data frame <code>raw</code>_data` from the source data:</p>
+<p>The data is maintained in <a
+href="https://docs.google.com/spreadsheets/d/1TBv5iPiPnSUSu36J0K6HxHu3pYs2A1rL/edit?gid=1283124273#gid=1283124273">this
+Google Spreadsheet</a>.</p>
+<p>Read the relevant worksheet (published as csv):</p>
+<pre class="r"><code>raw_data &lt;- read_csv(&quot;https://docs.google.com/spreadsheets/d/e/2PACX-1vSiTV0Y_GfXhKBxGdNueR5GKLN_mLC76CE7mrYVUbLjb2ykRvB2TVMosxqPWKnVWg/pub?gid=1283124273&amp;single=true&amp;output=csv&quot;, col_types = cols(.default = &quot;c&quot;))</code></pre>
+</div>
+<div id="process-source-data" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Process source
+data</h1>
+<div id="tidy-data" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Tidy data</h2>
+<p>Clean data somewhat:</p>
+<pre class="r"><code>input_data &lt;-
+  raw_data |&gt;
+  remove_empty(&quot;rows&quot;) |&gt;
+  clean_names()</code></pre>
+</div>
+<div id="scientific-names" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Scientific names</h2>
+<p>Use the <a href="https://www.gbif.org/tools/name-parser">GBIF
+nameparser</a> to retrieve nomenclatural information for the scientific
+names in the checklist:</p>
+<pre class="r"><code>parsed_names &lt;-
+  input_data |&gt;
+  distinct(scientific_name) |&gt;
+  pull() |&gt; # Create vector from dataframe
+  parsenames() # An rgbif function</code></pre>
+<p>Show scientific names with nomenclatural issues, i.e. not of
+<code>type = SCIENTIFIC</code> or that could not be fully parsed. Note:
+these are not necessarily incorrect.</p>
+<pre class="r"><code>parsed_names |&gt;
+  select(scientificname, type, parsed, parsedpartially, rankmarker) |&gt;
+  filter(!(type == &quot;SCIENTIFIC&quot; &amp; parsed == &quot;TRUE&quot; &amp; parsedpartially == &quot;FALSE&quot;))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["scientificname"],"name":[1],"type":["chr"],"align":["left"]},{"label":["type"],"name":[2],"type":["chr"],"align":["left"]},{"label":["parsed"],"name":[3],"type":["lgl"],"align":["right"]},{"label":["parsedpartially"],"name":[4],"type":["lgl"],"align":["right"]},{"label":["rankmarker"],"name":[5],"type":["chr"],"align":["left"]}],"data":[],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Correct names in the raw file and reparse.</p>
+</div>
+<div id="taxon-ids" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Taxon IDs</h2>
+<p>To link taxa with information in the extension(s), each taxon needs a
+unique and stable <code>taxonID</code>. Here we create one in the form
+of <code>dataset_shortname:taxon:hash</code>, where <code>hash</code> is
+unique code based on scientific name and kingdom. However, the
+<code>hash</code> will only remain the same as long as scientific name
+and kingdom remain the same. As soon as one character is changed, a new
+hash will be generated. Therefore, we strongly recommend to create the
+hash once for each taxon, and add it to the raw data file in the column
+<code>taxon_id_hash</code>. This way, the hash will remain stable even
+if scientific names change or are corrected in the future.</p>
+<pre class="r"><code>vdigest &lt;- Vectorize(digest) # Vectorize digest function to work with vectors
+taxon_id_hashes &lt;- 
+    input_data |&gt;
+  mutate(
+    # Only create a hash if taxon_id_hash is missing
+    taxon_id_hash = if_else(
+      is.na(taxon_id_hash),
+      vdigest(paste(scientific_name, kingdom), algo = &quot;md5&quot;),
+      taxon_id_hash
+      )
+  ) |&gt;
+  select(taxon_id_hash, scientific_name)
+
+taxon_id_hashes</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["taxon_id_hash"],"name":[1],"type":["chr"],"align":["left"]},{"label":["scientific_name"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"c218a947b5591a7b39b626622e899901","2":"Achondrostoma oligolepis"},{"1":"16b9ce9e19562f42bafda84ffa48d110","2":"Aedes aegypti"},{"1":"5ef24f5c5b939b1f933b52e22f4e608b","2":"Aedes albopictus"},{"1":"27eea5e50d11e7148dc0bdde7009e40b","2":"Alburnus alburnus"},{"1":"4ac71bc8355e62cf3f8479449ea25e5d","2":"Ameiurus melas"},{"1":"c390be62a3b8f3a071151ef5fa06e286","2":"Anguillicoloides crassus"},{"1":"eafd7e89ce84549834243caf67f0b7e9","2":"Argulus foliaceus"},{"1":"9495e84453fcde268be8da6cd6130544","2":"Australoheros facetus"},{"1":"b6379ef1bd96c73c652aaf9366aeb05c","2":"Bosmina coregoni"},{"1":"6f83cd5d94324cbabc5287c556780404","2":"Branchiura sowerbyi"},{"1":"6f83cd5d94324cbabc5287c556780404","2":"Branchiura sowerbyi"},{"1":"6d11d0374971e4b0ec87c29d9acc52f2","2":"Carassius auratus"},{"1":"6d11d0374971e4b0ec87c29d9acc52f2","2":"Carassius auratus"},{"1":"a6b7d41c1a3ef1cdf5e86343d6170f2a","2":"Carassius gibelio"},{"1":"10f2c21e38d910bcc489e526cb5706da","2":"Corbicula fluminea"},{"1":"6d9335c733f5b78d7ba8cf263fbb9708","2":"Cordylophora caspia"},{"1":"d5028a9aef3ac5374515871a2f025ba0","2":"Crangonyx pseudogracilis"},{"1":"86b717731e4a49b77311807534059e7f","2":"Craspedacusta sowerbii"},{"1":"86b717731e4a49b77311807534059e7f","2":"Craspedacusta sowerbii"},{"1":"183bf2e499d9dc9c6fcc95ddab39e10e","2":"Cyprinus carpio"},{"1":"183bf2e499d9dc9c6fcc95ddab39e10e","2":"Cyprinus carpio"},{"1":"6c05fa637bf0d5e8f6adab6494f6f446","2":"Dactylogyrus anchoratus"},{"1":"a27b9d085f82ec1dbeb4818ae1a832cf","2":"Eriocheir sinensis"},{"1":"36a95cf7e2a67c38388e1e28f0805301","2":"Esox lucius"},{"1":"36a95cf7e2a67c38388e1e28f0805301","2":"Esox lucius"},{"1":"32dc2e18733fffa92ba4e1b35d03c4e2","2":"Ferrissia fragilis"},{"1":"1d17b434b113730d1e811c0cf1bf4789","2":"Fundulus heteroclitus"},{"1":"4497da3d5e3ef61d73279635415cfa16","2":"Galba truncatula"},{"1":"85ff0c479c1d6df744e0dc340ae72bb8","2":"Gambusia holbrooki"},{"1":"85ff0c479c1d6df744e0dc340ae72bb8","2":"Gambusia holbrooki"},{"1":"7da3ddcb0ae6672d31240578f2c4f854","2":"Gobio lozanoi"},{"1":"680982d78f7356ba787d86f932b16eec","2":"Graptemys pseudogeographica"},{"1":"c251fec7a5a453358404665b84088bde","2":"Gyraulus chinensis"},{"1":"19c9456259dffea1f932fa1048d67bc2","2":"Gyraulus parvus"},{"1":"cab16bdde0402702535d82014c391c19","2":"Gyrodactylus salaris"},{"1":"3f67c44b431393a1e5cd4fb1098c543f","2":"Ictalurus punctatus"},{"1":"50db10822a4e5a4f58264b51507b3af9","2":"Ilyodromus viridulus"},{"1":"0d57bb658352d842f86dfca6834276d1","2":"Lepomis gibbosus"},{"1":"4ae7897b8d8bf9c8185f5c0d4da2d216","2":"Lernaea cyprinacea"},{"1":"5d7007717ed2e4805fcbe7680f6ef1d3","2":"Micropterus salmoides"},{"1":"5d7007717ed2e4805fcbe7680f6ef1d3","2":"Micropterus salmoides"},{"1":"688ab698e2035710b16d7822093a7a12","2":"Mustela vison"},{"1":"0c929a3c2d8f73ac8fece9c327c527f7","2":"Oncorhynchus mykiss"},{"1":"0c929a3c2d8f73ac8fece9c327c527f7","2":"Oncorhynchus mykiss"},{"1":"30865725a1ec2de0238ecbb47367864e","2":"Pacifastacus leniusculus"},{"1":"bc013910cbdd2d0d963c27a77e5d2974","2":"Pectinatella magnifica"},{"1":"82577c8765e55fc6ce5f26278b94d117","2":"Pelophylax perezi"},{"1":"82577c8765e55fc6ce5f26278b94d117","2":"Pelophylax perezi"},{"1":"0121561a1fcfbbf338f95a5d95f48992","2":"Perca fluviatilis"},{"1":"0121561a1fcfbbf338f95a5d95f48992","2":"Perca fluviatilis"},{"1":"55f8a871a14a4768b5418c4cd77fd40b","2":"Physella acuta"},{"1":"55f8a871a14a4768b5418c4cd77fd40b","2":"Physella acuta"},{"1":"55f8a871a14a4768b5418c4cd77fd40b","2":"Physella acuta"},{"1":"f34480779591bd6f51e54676c85998de","2":"Pisidium casertanum"},{"1":"48993511f6b4806e75e327edb561f8ad","2":"Planorbarius corneus"},{"1":"ecb58bad3ee7a827c54e9b8c4890f1e5","2":"Planorbella duryi"},{"1":"ecb58bad3ee7a827c54e9b8c4890f1e5","2":"Planorbella duryi"},{"1":"892599dcf435e7bac72cbecf553d81dc","2":"Planorbella trivolvis"},{"1":"dedfc4db712063102f022beb7a51eb6e","2":"Potamopyrgus antipodarum"},{"1":"ad6ef633d9bc18930d8894c8e33e9f3a","2":"Procambarus clarkii"},{"1":"ad6ef633d9bc18930d8894c8e33e9f3a","2":"Procambarus clarkii"},{"1":"48f1bfe51eaa10e4e6dc86f6f6a1e307","2":"Protopolystoma xenopodis"},{"1":"3827453e03468558ea4b21a077769675","2":"Pseudemys concinna"},{"1":"f0264f1339bbc794dcaa34dc99d6a76a","2":"Pseudemys nelsoni"},{"1":"6f324938a43c9e5cf6f7c6f6dc52d30c","2":"Pseudochondrostoma polylepis"},{"1":"793d520b66493806a1a2ef2e5781d662","2":"Pseudodactylogyrus anguillae"},{"1":"7fd4b48abb8d674661dd63d2a626fd44","2":"Pseudodactylogyrus bini"},{"1":"4d44ee4e4c31e377189b7ac613567aca","2":"Pseudosuccinea columella"},{"1":"61cc5e417a3e5f843194e908ab75621b","2":"Radix balthica"},{"1":"61cc5e417a3e5f843194e908ab75621b","2":"Radix balthica"},{"1":"321be3fdc7c0e92ac227db28dfd2d906","2":"Radix peregra"},{"1":"e58494023038cb61dddb58320bb408f0","2":"Rutilus rutilus"},{"1":"e58494023038cb61dddb58320bb408f0","2":"Rutilus rutilus"},{"1":"29a2f2001381c101e0513570519626cf","2":"Salmo trutta"},{"1":"8bec470dcc174c1b4f743bdc4bc04ea1","2":"Sander lucioperca"},{"1":"8bec470dcc174c1b4f743bdc4bc04ea1","2":"Sander lucioperca"},{"1":"e975246316af170f7457fa4e20f1b197","2":"Silurus glanis"},{"1":"a2ab6a79d2d4147497afd8b40cf943fa","2":"Stenopelmus rufinasus"},{"1":"ee4d1f39a2070973657d905c5c06d273","2":"Strandesia vavrai"},{"1":"f979db9939f00bbacdebcb483135b503","2":"Tinca tinca"},{"1":"af4695539ee8dcb286fcf2e6c12fefa1","2":"Trachemys scripta"},{"1":"a7f0a08b6964118423232131d3229f53","2":"Trichocorixa verticalis"},{"1":"8ee57e2c26a970661ed712a87463e9e8","2":"Triturus carnifex"},{"1":"e822d74e1907cdb22ca4e2f95cc710da","2":"Xenopus laevis"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>write.csv(taxon_id_hashes, here(&quot;data&quot;, &quot;raw&quot;, &quot;taxon_id_hashes.csv&quot;), na = &quot;&quot;)</code></pre>
+<p>After you have filled in the <code>taxon_id_hash</code> column in the
+raw data file, run all code again from the beginning.</p>
+<p>In the next code chunks, we remove the rows with missing
+<code>taxon_id_hash</code> values:</p>
+<pre class="r"><code>(removed_rows &lt;-
+  input_data |&gt;
+  filter(is.na(taxon_id_hash)))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["taxon_id_hash"],"name":[1],"type":["chr"],"align":["left"]},{"label":["scientific_name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["kingdom"],"name":[3],"type":["chr"],"align":["left"]},{"label":["phylum"],"name":[4],"type":["chr"],"align":["left"]},{"label":["class"],"name":[5],"type":["chr"],"align":["left"]},{"label":["order"],"name":[6],"type":["chr"],"align":["left"]},{"label":["family"],"name":[7],"type":["chr"],"align":["left"]},{"label":["genus"],"name":[8],"type":["chr"],"align":["left"]},{"label":["taxon_rank"],"name":[9],"type":["chr"],"align":["left"]},{"label":["nomenclatural_code"],"name":[10],"type":["chr"],"align":["left"]},{"label":["location"],"name":[11],"type":["chr"],"align":["left"]},{"label":["country_code"],"name":[12],"type":["chr"],"align":["left"]},{"label":["occurrence_status"],"name":[13],"type":["chr"],"align":["left"]},{"label":["establishment_means"],"name":[14],"type":["chr"],"align":["left"]},{"label":["degree_of_establishment"],"name":[15],"type":["chr"],"align":["left"]},{"label":["introduction_pathway_1"],"name":[16],"type":["chr"],"align":["left"]},{"label":["introduction_pathway_2"],"name":[17],"type":["chr"],"align":["left"]},{"label":["introduction_pathway_3"],"name":[18],"type":["chr"],"align":["left"]},{"label":["introduction_pathway_4"],"name":[19],"type":["chr"],"align":["left"]},{"label":["introduction_pathway_5"],"name":[20],"type":["chr"],"align":["left"]},{"label":["introduction_pathway_6"],"name":[21],"type":["chr"],"align":["left"]},{"label":["introduction_pathway_7"],"name":[22],"type":["chr"],"align":["left"]},{"label":["date_first_observation"],"name":[23],"type":["chr"],"align":["left"]},{"label":["date_last_observation"],"name":[24],"type":["chr"],"align":["left"]},{"label":["source"],"name":[25],"type":["chr"],"align":["left"]},{"label":["occurrence_remarks"],"name":[26],"type":["chr"],"align":["left"]},{"label":["native_range"],"name":[27],"type":["chr"],"align":["left"]},{"label":["terrestrial"],"name":[28],"type":["chr"],"align":["left"]},{"label":["marine"],"name":[29],"type":["chr"],"align":["left"]},{"label":["freshwater"],"name":[30],"type":["chr"],"align":["left"]},{"label":["host"],"name":[31],"type":["chr"],"align":["left"]},{"label":["date_added"],"name":[32],"type":["chr"],"align":["left"]},{"label":["added_by"],"name":[33],"type":["chr"],"align":["left"]},{"label":["verified_by"],"name":[34],"type":["chr"],"align":["left"]}],"data":[],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>input_data &lt;-
+  input_data |&gt;
+  filter(!is.na(taxon_id_hash))</code></pre>
+<pre class="r"><code>cat(paste0(
+  &quot;Number of rows with missing `taxon_id_hash`: &quot;, nrow(removed_rows),
+  &quot;\nNumbers of rows remaining in the checklist: &quot;, nrow(input_data)
+))</code></pre>
+<pre><code>## Number of rows with missing `taxon_id_hash`: 0
+## Numbers of rows remaining in the checklist: 84</code></pre>
+<p>Next, we create the <code>taxon_id</code> column based on the
+<code>taxon_id_hash</code> column:</p>
+<pre class="r"><code>input_data &lt;-
+  input_data |&gt;
+  mutate(
+    taxon_id = paste(
+      &quot;alien-freshwater-fauna-portugal&quot;,
+      &quot;taxon&quot;,
+      taxon_id_hash,
+      sep = &quot;:&quot;
+    ))</code></pre>
+</div>
+<div id="save-raw-data-with-taxonid-hashes" class="section level2"
+number="3.4">
+<h2><span class="header-section-number">3.4</span> Save raw data with
+taxonID hashes</h2>
+<p>Save the source data to the repository to keep track of changes:</p>
+<pre class="r"><code>write_csv(raw_data, here(&quot;data&quot;, &quot;raw&quot;, &quot;alien-freshwater-fauna-portugal-checklist_dump.csv&quot;), na = &quot;&quot;)</code></pre>
+</div>
+</div>
+<div id="taxon-core" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Taxon core</h1>
+<div id="term-mapping" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Term mapping</h2>
+<div id="record-level-terms" class="section level3" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Record-level
+terms</h3>
+<p>Create a dataframe with unique taxa only (ignoring multiple
+distribution rows). Map the data to <a
+href="http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml">Darwin Core
+Taxon</a>.</p>
+<p>Start with record-level terms which contain metadata about the
+dataset (which is generally the same for all records).</p>
+<pre class="r"><code>taxon &lt;-
+  input_data |&gt;
+  distinct(taxon_id, .keep_all = TRUE) |&gt;
+  mutate(
+    language = &quot;en&quot;, # e.g. &quot;en&quot;
+    license = &quot;https://creativecommons.org/licenses/by/4.0/&quot;,
+    rightsHolder = &quot;MARE&quot;, 
+    datasetID = &quot;my_dataset_doi&quot;,
+    institutionCode = &quot;MARE&quot;,
+    datasetName = &quot;Checklist of non-native freshwater fauna in Portugal&quot;
+  )</code></pre>
+</div>
+<div id="taxon-level-terms" class="section level3" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Taxon-level
+terms</h3>
+<p>The following terms contain information about the taxon:</p>
+<pre class="r"><code>taxon &lt;-
+  taxon |&gt;
+  dplyr::mutate(
+    taxonID = taxon_id,
+    scientificName = scientific_name,
+    kingdom = kingdom,
+    phylum = phylum,
+    class = class,
+    order = order,
+    family = family,
+    genus = genus,
+    taxonRank = taxon_rank,
+    nomenclaturalCode = nomenclatural_code
+  )</code></pre>
+</div>
+</div>
+<div id="post-processing" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Post-processing</h2>
+<p>Arrange by taxonID and only keep the Darwin Core columns:</p>
+<pre class="r"><code>taxon &lt;-
+  taxon |&gt; 
+  arrange(taxonID) |&gt; 
+  select(
+    &quot;language&quot;, &quot;license&quot;, &quot;rightsHolder&quot;, &quot;datasetID&quot;, &quot;institutionCode&quot;,
+    &quot;datasetName&quot;, &quot;taxonID&quot;, &quot;scientificName&quot;, &quot;kingdom&quot;, &quot;phylum&quot;, &quot;class&quot;,
+    &quot;order&quot;, &quot;family&quot;, &quot;genus&quot;,
+    &quot;taxonRank&quot;, &quot;nomenclaturalCode&quot;
+  )</code></pre>
+</div>
+</div>
+<div id="create-distribution-extension" class="section level1"
+number="5">
+<h1><span class="header-section-number">5</span> Create distribution
+extension</h1>
+<div id="term-mapping-1" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Term mapping</h2>
+<p>Create a dataframe with all data (including multiple distributions).
+Map the data to <a
+href="http://rs.gbif.org/extension/gbif/1.0/distribution.xml">Species
+Distribution</a>.</p>
+<pre class="r"><code>distribution &lt;-
+  input_data |&gt;
+  # pathway
+  pivot_longer(
+    names_to = &quot;key&quot;, 
+    values_to = &quot;pathway&quot;, 
+    starts_with(&quot;introduction_pathway&quot;),
+    values_drop_na = FALSE) |&gt;
+  filter( # keep NA value for species with no pathway provided
+    !is.na(pathway) |
+      (is.na(pathway) &amp; key == &quot;introduction_pathway_1&quot;)
+      ) |&gt; 
+  # other terms
+  mutate(
+    taxonID = taxon_id,
+    locality = location,
+    countryCode = country_code,
+    occurrenceStatus = occurrence_status,
+    establishmentMeans = establishment_means,
+    degreeOfEstablishment = degree_of_establishment,
+    eventDate = case_when(
+      is.na(date_first_observation) &amp; is.na(date_last_observation) ~ NA,
+      is.na(date_first_observation) ~ paste0(&quot;/&quot;, date_last_observation),
+      is.na(date_last_observation) ~ paste0(date_first_observation, &quot;/&quot;),
+      !is.na(date_first_observation) &amp; !is.na(date_last_observation) ~ 
+        paste(date_first_observation, date_last_observation, sep = &quot;/&quot;)
+    ),
+    source = source,
+    occurrenceRemarks = occurrence_remarks
+  )</code></pre>
+</div>
+<div id="post-processing-1" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Post-processing</h2>
+<p>Only keep the Darwin Core columns and arrange by taxonID.</p>
+<pre class="r"><code>distribution &lt;-
+  distribution |&gt;
+  select(
+    &quot;taxonID&quot;, &quot;locality&quot;, &quot;countryCode&quot;, &quot;occurrenceStatus&quot;,
+    &quot;establishmentMeans&quot;, &quot;degreeOfEstablishment&quot;, &quot;pathway&quot;, &quot;eventDate&quot;,
+    &quot;source&quot;, &quot;occurrenceRemarks&quot;
+  ) |&gt;
+  arrange(taxonID)</code></pre>
+</div>
+</div>
+<div id="species-profile-extension" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Species profile
+extension</h1>
+<p>In this extension we will express broad habitat characteristics of
+the species (e.g. <code>isTerrestrial</code>).</p>
+<p>Create a dataframe with unique taxa only (ignoring multiple
+distribution rows). Only keep records for which
+<code>terrestrial</code>, <code>marine</code> and
+<code>freshwater</code> is not empty.</p>
+<p>Map the data to <a
+href="http://rs.gbif.org/extension/gbif/1.0/speciesprofile.xml">Species
+Profile</a>.</p>
+<pre class="r"><code>species_profile &lt;-
+  input_data |&gt;
+  distinct(taxon_id, .keep_all = TRUE) |&gt; 
+  filter(
+    !is.na(terrestrial) |
+      !is.na(marine) |
+      !is.na(freshwater)
+  ) |&gt; 
+  mutate(
+    .keep = &quot;none&quot;,
+    taxonID = taxon_id,
+    isMarine = marine,
+    isFreshwater = freshwater,
+    isTerrestrial = terrestrial
+  ) |&gt; 
+  arrange(taxonID)</code></pre>
+<div id="description-extension" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Description
+extension</h2>
+<p>In the description extension we want to include the native range of a
+species.</p>
+<pre class="r"><code>description &lt;-
+  input_data |&gt; 
+  # unique taxa only (ignoring multiple distribution rows)
+  distinct(taxon_id, .keep_all = TRUE) |&gt; 
+  # Separate values on `|` 
+  mutate(native_range = strsplit(native_range, &quot;\\|&quot;)) |&gt; 
+  unnest(native_range) |&gt; 
+  filter(!is.na(native_range)) |&gt; 
+  mutate(
+    .keep = &quot;none&quot;,
+    taxonID = taxon_id,
+    description = str_trim(native_range),
+    type = &quot;native range&quot;,
+    language = &quot;en&quot;
+    ) |&gt; 
+  arrange(taxonID)</code></pre>
+</div>
+</div>
+<div id="save-to-csv" class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Save to CSV:</h1>
+<pre class="r"><code>write_csv(taxon, here(&quot;data&quot;, &quot;processed&quot;, &quot;taxon.csv&quot;), na = &quot;&quot;)
+write_csv(distribution, here(&quot;data&quot;, &quot;processed&quot;, &quot;distribution.csv&quot;), na = &quot;&quot;)
+write_csv(species_profile, here(&quot;data&quot;, &quot;processed&quot;, &quot;speciesprofile.csv&quot;), na = &quot;&quot;)
+write_csv(description, here(&quot;data&quot;, &quot;processed&quot;, &quot;description.csv&quot;), na = &quot;&quot;)</code></pre>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
