@@ -2,8 +2,7 @@
 title: "Darwin Core mapping"
 subtitle: "For: Checklist of non-native freshwater fauna in Portugal"
 author:
-- author_1
-- author_2
+- Sanne Govaert
 date: "`r Sys.Date()`"
 output:
   html_document:
