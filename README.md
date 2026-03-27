@@ -2,7 +2,7 @@
 
 ## Rationale
 
-This repository contains the functionality to standardize the data of [Anastácio et al. 2019](https://doi.org/10.1016/j.scitotenv.2018.09.251) to a [Darwin Core Archive](https://www.gbif.org/darwin-core) that can be harvested by [GBIF](https://www.gbif.org/).
+This repository contains the functionality to standardize the data of [Anastácio et al. 2019](https://doi.org/10.1016/j.scitotenv.2018.09.251) to a [Darwin Core Archive](https://www.gbif.org/darwin-core) that can be harvested by [GBIF](https://www.gbif.org/). The checklist was first assembled in 2019 and was enriched with more taxa and information in 2025.
 
 ## Workflow
 
