@@ -67,28 +67,6 @@ input_data <-
   clean_names()
 ```
 
-## Scientific names
-
-Use the [GBIF nameparser](https://www.gbif.org/tools/name-parser) to retrieve nomenclatural information for the scientific names in the checklist:
-
-```{r}
-parsed_names <-
-  input_data |>
-  distinct(scientific_name) |>
-  pull() |> # Create vector from dataframe
-  parsenames() # An rgbif function
-```
-
-Show scientific names with nomenclatural issues, i.e. not of `type = SCIENTIFIC` or that could not be fully parsed. Note: these are not necessarily incorrect.
-
-```{r}
-parsed_names |>
-  select(scientificname, type, parsed, parsedpartially, rankmarker) |>
-  filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
-```
-
-Correct names in the raw file and reparse.
-
 ## Taxon IDs
 
 To link taxa with information in the extension(s), each taxon needs a unique and stable `taxonID`. Here we create one in the form of `dataset_shortname:taxon:hash`, where `hash` is unique code based on scientific name and kingdom. However, the `hash` will only remain the same as long as scientific name and kingdom remain the same. As soon as one character is changed, a new hash will be generated. Therefore, we strongly recommend to create the hash once for each taxon, and add it to the raw data file in the column `taxon_id_hash`. This way, the hash will remain stable even if scientific names change or are corrected in the future.
