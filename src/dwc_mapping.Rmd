@@ -187,7 +187,6 @@ taxon <-
   select(
     "language", "license", "rightsHolder", "datasetID", "institutionCode",
     "datasetName", "taxonID", "scientificName", "kingdom", "phylum", "class",
-    "order", "family", "genus",
     "taxonRank", "nomenclaturalCode"
   )
 ```
